@@ -17,6 +17,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     Triangle triangle;     // ( NEW )
     Square quad;           // ( NEW )
 
+    private float angleTriangle = 0.0f; // (NEW)
+    private float angleQuad = 0.0f;     // (NEW)
+    private float speedTriangle = 0.5f; // (NEW)
+    private float speedQuad = -0.4f;    // (NEW)
+
     // Constructor with global application context
     public MyGLRenderer(Context context) {
         this.context = context;
@@ -64,18 +69,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // Call back to draw the current frame.
     @Override
     public void onDrawFrame(GL10 gl) {
-        // Clear color and depth buffers using clear-value set earlier
+        // Clear color and depth buffers using clear-values set earlier
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        gl.glLoadIdentity();                 // Reset model-view matrix ( NEW )
-        gl.glTranslatef(-1.5f, 0.0f, -6.0f); // Translate left and into the screen ( NEW )
-        triangle.draw(gl);                   // Draw triangle ( NEW )
+        gl.glLoadIdentity();                 // Reset model-view matrix
+        gl.glTranslatef(-1.5f, 0.0f, -6.0f); // Translate left and into the screen
+        gl.glRotatef(angleTriangle, 0.0f, 1.0f, 0.0f); // Rotate the triangle about the y-axis (NEW)
+        triangle.draw(gl);                   // Draw triangle
 
-        // Translate right, relative to the previous translation ( NEW )
-        gl.glTranslatef(3.0f, 0.0f, 0.0f);
-        quad.draw(gl);
+        gl.glLoadIdentity();                 // Reset the mode-view matrix (NEW)
+        gl.glTranslatef(1.5f, 0.0f, -6.0f);  // Translate right and into the screen (NEW)
+        gl.glRotatef(angleQuad, 1.0f, 0.0f, 0.0f); // Rotate the square about the x-axis (NEW)
+        quad.draw(gl);                       // Draw quad
 
-        // You OpenGL|ES rendering code here
-        // ......
+        // Update the rotational angle after each refresh (NEW)
+        angleTriangle += speedTriangle; // (NEW)
+        angleQuad += speedQuad;         // (NEW)
     }
 }
