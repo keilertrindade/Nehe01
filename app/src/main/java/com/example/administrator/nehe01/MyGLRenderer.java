@@ -13,20 +13,19 @@ import android.opengl.GLU;
  *  OpenGL Custom renderer used with GLSurfaceView
  */
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-    Context context;   // Application's context
-    Triangle triangle;     // ( NEW )
-    Square quad;           // ( NEW )
 
-    private float angleTriangle = 0.0f; // (NEW)
-    private float angleQuad = 0.0f;     // (NEW)
-    private float speedTriangle = 0.5f; // (NEW)
-    private float speedQuad = -0.4f;    // (NEW)
+    private Context context;   // Application context needed to read image (NEW)
+    private TextureCube cube;
+    float angleX = 0;   // (NEW)
+    float angleY = 0;   // (NEW)
+    float speedX = 0;   // (NEW)
+    float speedY = 0;   // (NEW)
+    float z = -6.0f; // rotational speed for cube
 
-    // Constructor with global application context
+    // Constructor
     public MyGLRenderer(Context context) {
-        this.context = context;
-        triangle = new Triangle();   // ( NEW )
-        quad = new Square();
+        this.context = context;   // Get the application context (NEW)
+        cube = new TextureCube();
     }
 
     // Call back when the surface is first created or re-created
@@ -40,6 +39,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         gl.glShadeModel(GL10.GL_SMOOTH);   // Enable smooth shading of color
         gl.glDisable(GL10.GL_DITHER);      // Disable dithering for better performance
 
+        cube.loadTexture(gl, context);    // Load image into Texture (NEW)
+        gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture (NEW)
         // You OpenGL|ES initialization code here
         // ......
     }
@@ -72,18 +73,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Clear color and depth buffers using clear-values set earlier
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        gl.glLoadIdentity();                 // Reset model-view matrix
-        gl.glTranslatef(-1.5f, 0.0f, -6.0f); // Translate left and into the screen
-        gl.glRotatef(angleTriangle, 0.0f, 1.0f, 0.0f); // Rotate the triangle about the y-axis (NEW)
-        triangle.draw(gl);                   // Draw triangle
-
-        gl.glLoadIdentity();                 // Reset the mode-view matrix (NEW)
-        gl.glTranslatef(1.5f, 0.0f, -6.0f);  // Translate right and into the screen (NEW)
-        gl.glRotatef(angleQuad, 1.0f, 0.0f, 0.0f); // Rotate the square about the x-axis (NEW)
-        quad.draw(gl);                       // Draw quad
+        // ----- Render the Cube -----
+        gl.glLoadIdentity();                  // Reset the current model-view matrix
+        gl.glTranslatef(0.0f, 0.0f, z);   // Translate into the screen (NEW)
+        gl.glRotatef(angleX, 1.0f, 0.0f, 0.0f); // Rotate (NEW)
+        gl.glRotatef(angleY, 0.0f, 1.0f, 0.0f); // Rotate (NEW)
+        cube.draw(gl);
 
         // Update the rotational angle after each refresh (NEW)
-        angleTriangle += speedTriangle; // (NEW)
-        angleQuad += speedQuad;         // (NEW)
+        angleX += speedX;  // (NEW)
+        angleY += speedY;  // (NEW)
     }
 }

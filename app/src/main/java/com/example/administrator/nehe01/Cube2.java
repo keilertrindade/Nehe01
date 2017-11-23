@@ -12,6 +12,14 @@ import javax.microedition.khronos.opengles.GL10;
  * Define the vertices for a representative face.
  * Render the cube by translating and rotating the face.
  */
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import javax.microedition.khronos.opengles.GL10;
+/*
+ * Define the vertices for a representative face.
+ * Render the cube by translating and rotating the face.
+ */
 public class Cube2 {
     private FloatBuffer vertexBuffer; // Buffer for vertex-array
 
