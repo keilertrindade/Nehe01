@@ -21,6 +21,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     float speedX = 0;   // (NEW)
     float speedY = 0;   // (NEW)
     float z = -6.0f; // rotational speed for cube
+    private static float angleCube = 0;
+    private static float speedCube = -1.5f;
 
     // Constructor
     public MyGLRenderer(Context context) {
@@ -31,7 +33,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // Call back when the surface is first created or re-created
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Set color's clear-value to black
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);  // Set color's clear-value to black
         gl.glClearDepthf(1.0f);            // Set depth's clear-value to farthest
         gl.glEnable(GL10.GL_DEPTH_TEST);   // Enables depth-buffer for hidden surface removal
         gl.glDepthFunc(GL10.GL_LEQUAL);    // The type of depth testing to do
@@ -75,13 +77,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // ----- Render the Cube -----
         gl.glLoadIdentity();                  // Reset the current model-view matrix
-        gl.glTranslatef(0.0f, 0.0f, z);   // Translate into the screen (NEW)
-        gl.glRotatef(angleX, 1.0f, 0.0f, 0.0f); // Rotate (NEW)
-        gl.glRotatef(angleY, 0.0f, 1.0f, 0.0f); // Rotate (NEW)
+        gl.glTranslatef(0.0f, 0.0f, -7.0f);
+        gl.glRotatef(angleCube, 1f, 1f, 1);
         cube.draw(gl);
+        angleCube += speedCube;
 
-        // Update the rotational angle after each refresh (NEW)
-        angleX += speedX;  // (NEW)
-        angleY += speedY;  // (NEW)
     }
 }
